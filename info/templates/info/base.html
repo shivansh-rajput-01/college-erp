@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Collage-Gadh System">
+    <meta name="author" content="Collage-Gadh">
+
+    <title>{% block title %}Collage-Gadh{% endblock %}</title>
+    {% load static %}
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+      }
+      
+      .sidebar {
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      }
+      
+      .sidebar-item {
+        border-left: 4px solid transparent;
+        transition: all 0.3s ease;
+      }
+      
+      .sidebar-item:hover {
+        background: rgba(59, 130, 246, 0.1);
+        border-left-color: #3b82f6;
+      }
+      
+      .sidebar-item.active {
+        background: rgba(59, 130, 246, 0.2);
+        border-left-color: #3b82f6;
+      }
+      
+      .navbar {
+        background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      }
+      
+      .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+      }
+      
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        border: none;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      }
+      
+      .btn-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        border: none;
+      }
+      
+      .badge-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      }
+      
+      .badge-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      }
+      
+      .table-hover tbody tr:hover {
+        background-color: rgba(59, 130, 246, 0.05);
+      }
+      
+      input, textarea, select {
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+      
+      input:focus, textarea:focus, select:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+    </style>
+
+    {% block css %}
+    {% endblock %}
+
+  </head>
+
+  <body id="page-top" class="flex h-screen bg-gray-100">
+
+    <!-- Sidebar -->
+    <aside class="sidebar w-64 h-screen overflow-y-auto">
+      <div class="p-6 border-b border-slate-700">
+        <a href="{% url 'index' %}" class="text-2xl font-bold text-white flex items-center gap-2">
+          <i class="fas fa-graduation-cap"></i> Collage-Gadh
+        </a>
+      </div>
+      
+      <nav class="mt-8 px-4 space-y-2">
+        <a href="{% url 'index' %}" class="sidebar-item block px-4 py-3 text-gray-300 hover:text-white font-medium">
+          <i class="fas fa-home mr-3"></i> Home
+        </a>
+        {% if request.user.is_student %}
+          <a href="{% url 'attendance' request.user.student.USN %}" class="sidebar-item block px-4 py-3 text-gray-300 hover:text-white font-medium">
+            <i class="fas fa-clipboard-check mr-3"></i> Attendance
+          </a>
+          <a href="{% url 'attendance' request.user.student.USN %}" class="sidebar-item block px-4 py-3 text-gray-300 hover:text-white font-medium">
+            <i class="fas fa-chart-bar mr-3"></i> Attendance By Subject
+          </a>
+          <a href="{% url 'marks_list' request.user.student.USN %}" class="sidebar-item block px-4 py-3 text-gray-300 hover:text-white font-medium">
+            <i class="fas fa-star mr-3"></i> Marks
+          </a>
+          <a href="{% url 'timetable' request.user.student.class_id_id %}" class="sidebar-item block px-4 py-3 text-gray-300 hover:text-white font-medium">
+            <i class="fas fa-calendar-alt mr-3"></i> Time Table
+          </a>
+
+        {% elif request.user.is_teacher %}
+          <a href="{% url 't_clas' request.user.teacher.id 1 %}" class="sidebar-item block px-4 py-3 text-gray-300 hover:text-white font-medium">
+            <i class="fas fa-clipboard-check mr-3"></i> Attendance
+          </a>
+          <a href="{% url 't_clas' request.user.teacher.id 2 %}" class="sidebar-item block px-4 py-3 text-gray-300 hover:text-white font-medium">
+            <i class="fas fa-star mr-3"></i> Marks
+          </a>
+          <a href="{% url 't_timetable' request.user.teacher.id %}" class="sidebar-item block px-4 py-3 text-gray-300 hover:text-white font-medium">
+            <i class="fas fa-calendar-alt mr-3"></i> Time Table
+          </a>
+          <a href="{% url 't_clas' request.user.teacher.id 3 %}" class="sidebar-item block px-4 py-3 text-gray-300 hover:text-white font-medium">
+            <i class="fas fa-file-alt mr-3"></i> Reports
+          </a>
+        {% endif %}
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col">
+      <!-- Top Navbar -->
+      <nav class="navbar h-16 flex items-center justify-between px-8 border-b border-gray-200">
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-6">
+          <span class="text-gray-700 font-medium capitalize">
+            {% if request.user.is_student %}
+              {{ request.user.student.name }}
+            {% elif request.user.is_teacher %}
+              {{ request.user.teacher.name }}
+            {% else %}
+              {{ request.user.username }}
+            {% endif %}
+          </span>
+          <button onclick="showLogoutModal()" class="text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </nav>
+
+      <!-- Page Content -->
+      <main class="flex-1 overflow-auto p-8">
+
+        {% block content %}
+        {% endblock %}
+      </main>
+    </div>
+    
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-xl p-6 max-w-md">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">
+          <i class="fas fa-exclamation-circle text-yellow-500 mr-2"></i> Ready to Leave?
+        </h3>
+        <p class="text-gray-600 mb-6">Select "Logout" below if you are ready to end your current session.</p>
+        <form method="post" action="{% url 'logout' %}" class="flex gap-4">
+          {% csrf_token %}
+          <button type="button" onclick="hideLogoutModal()" class="flex-1 px-4 py-2 bg-gray-300 text-gray-900 rounded-lg font-medium hover:bg-gray-400 transition">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition text-center">
+            Logout
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+      function showLogoutModal() {
+        document.getElementById('logoutModal').classList.remove('hidden');
+      }
+      
+      function hideLogoutModal() {
+        document.getElementById('logoutModal').classList.add('hidden');
+      }
+      
+      // Close modal when clicking outside
+      document.getElementById('logoutModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+          hideLogoutModal();
+        }
+      });
+    </script>
+
+    {% block scripts %}
+    {% endblock %}
+  </body>
+
+</html>

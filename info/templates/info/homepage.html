@@ -1,0 +1,131 @@
+{% extends 'info/base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block css %}
+<style>
+  .dashboard-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+  }
+  
+  .card-image {
+    height: 160px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 56px;
+  }
+  
+  .card-content {
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 12px;
+  }
+  
+  .card-description {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  
+  .card-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+  
+  .card-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    text-decoration: none;
+    color: white;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="mb-8">
+  <h1 class="text-4xl font-bold text-gray-900 mb-2">
+    <i class="fas fa-user-circle text-blue-500 mr-3"></i>Welcome {{ request.user.student.name }}
+  </h1>
+  <p class="text-gray-600">Check your attendance, marks, and timetable below</p>
+</div>
+
+<!-- Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+  <!-- Attendance Card -->
+  <div class="dashboard-card">
+    <div class="card-image">
+      <i class="fas fa-clipboard-check"></i>
+    </div>
+    <div class="card-content">
+      <h3 class="card-title">Attendance</h3>
+      <p class="card-description">
+        View your attendance status for each course. Check the list of classes conducted and your overall attendance percentage.
+      </p>
+      <a href="{% url 'attendance' request.user.student.USN %}" class="card-button">
+        <i class="fas fa-arrow-right mr-2"></i>View Attendance
+      </a>
+    </div>
+  </div>
+
+  <!-- Marks Card -->
+  <div class="dashboard-card">
+    <div class="card-image" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+      <i class="fas fa-star"></i>
+    </div>
+    <div class="card-content">
+      <h3 class="card-title">Marks</h3>
+      <p class="card-description">
+        View your marks for each course. This includes internal assessments, events, and semester end exam marks.
+      </p>
+      <a href="{% url 'marks_list' request.user.student.USN %}" class="card-button" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <i class="fas fa-arrow-right mr-2"></i>View Marks
+      </a>
+    </div>
+  </div>
+
+  <!-- Timetable Card -->
+  <div class="dashboard-card">
+    <div class="card-image" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+      <i class="fas fa-calendar-alt"></i>
+    </div>
+    <div class="card-content">
+      <h3 class="card-title">TimeTable</h3>
+      <p class="card-description">
+        View your class timetable in tabular form. Check the courses, timing, and day of each class.
+      </p>
+      <a href="{% url 'timetable' request.user.student.class_id_id %}" class="card-button" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        <i class="fas fa-arrow-right mr-2"></i>View TimeTable
+      </a>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

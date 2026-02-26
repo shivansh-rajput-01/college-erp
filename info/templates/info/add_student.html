@@ -1,0 +1,205 @@
+{% extends 'info/base.html' %}
+
+{% block title %}Add Student{% endblock %}
+
+{% block css %}
+<style>
+  .form-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .form-header {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 24px;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-label {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  
+  .form-input,
+  .form-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+  
+  .form-input:focus,
+  .form-select:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  }
+  
+  .form-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-submit {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+  }
+  
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  }
+  
+  .btn-reset {
+    background: #e2e8f0;
+    color: #1e293b;
+  }
+  
+  .btn-reset:hover {
+    background: #cbd5e1;
+  }
+  
+  .btn-cancel {
+    background: #ef4444;
+    color: white;
+  }
+  
+  .btn-cancel:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="mb-8">
+  <h1 class="text-4xl font-bold text-gray-900 mb-2">
+    <i class="fas fa-user-graduate text-green-500 mr-3"></i>Add New Student
+  </h1>
+  <p class="text-gray-600">Enter student information to enroll a new student in the system</p>
+</div>
+
+<!-- Form Card -->
+<div class="form-card p-8">
+  <div class="form-header -mx-8 -mt-8 mb-8">
+    <h2 class="text-2xl font-bold">Student Information</h2>
+    <p class="text-green-100 text-sm mt-2">Please fill in all fields carefully as they are important for academics</p>
+  </div>
+
+  {% if error %}
+    <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+      <i class="fas fa-exclamation-circle mr-2"></i>{{ error }}
+    </div>
+  {% endif %}
+
+  <form method="POST" action="{% url 'add_student' %}">
+    {% csrf_token %}
+
+    <!-- Class -->
+    <div class="form-group">
+      <label for="id_class" class="form-label">
+        <i class="fas fa-layer-group text-green-500 mr-2"></i>Class
+      </label>
+      <select id="id_class" name="class" class="form-select" required>
+        <option value="">-- Select Class --</option>
+        {% for class in all_classes %}
+          <option value="{{ class.id }}">{{ class }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- USN -->
+    <div class="form-group">
+      <label for="id_usn" class="form-label">
+        <i class="fas fa-id-card text-green-500 mr-2"></i>USN (University Serial Number)
+      </label>
+      <input 
+        type="text" 
+        id="id_usn"
+        name="usn" 
+        class="form-input" 
+        placeholder="e.g., AB0A00" 
+        required
+      >
+    </div>
+
+    <!-- Full Name -->
+    <div class="form-group">
+      <label for="id_full_name" class="form-label">
+        <i class="fas fa-user text-green-500 mr-2"></i>Full Name
+      </label>
+      <input 
+        type="text" 
+        id="id_full_name"
+        name="full_name" 
+        class="form-input" 
+        placeholder="e.g., Anil Kumar" 
+        required
+      >
+    </div>
+
+    <!-- Gender -->
+    <div class="form-group">
+      <label for="id_sex" class="form-label">
+        <i class="fas fa-venus-mars text-green-500 mr-2"></i>Gender
+      </label>
+      <select id="id_sex" name="sex" class="form-select" required>
+        <option value="">-- Select Gender --</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+    </div>
+
+    <!-- Date of Birth -->
+    <div class="form-group">
+      <label for="id_dob" class="form-label">
+        <i class="fas fa-calendar text-green-500 mr-2"></i>Date of Birth
+      </label>
+      <input 
+        type="date" 
+        id="id_dob"
+        name="dob" 
+        class="form-input" 
+        required
+      >
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-buttons">
+      <a href="{% url 'index' %}" class="btn btn-cancel">
+        <i class="fas fa-times mr-2"></i>Cancel
+      </a>
+      <input type="reset" value="Reset" class="btn btn-reset">
+      <input type="submit" value="Submit" class="btn btn-submit">
+    </div>
+  </form>
+</div>
+
+{% endblock %}
